@@ -16,19 +16,10 @@ type Click struct {
 // TODO créer la struct pour ClickEvent
 // ClickEvent représente un événement de clic brut, destiné à être passé via un channel
 // Ce n'est pas un modèle GORM direct.
-<<<<<<< Updated upstream
 // Un Click event a un LinkID(uint), un Timestamp (Time.Time), un UserAgent (string) et un IP (string).
-=======
-// Un Click event a un LinkID(uint), un Timestamp (Time.Time), un UserAgent (string) et un IP (string)
-
->>>>>>> Stashed changes
 type ClickEvent struct {
 	LinkID    uint      // ID du lien cliqué
 	Timestamp time.Time // Horodatage du clic
 	UserAgent string    // User-Agent de l'utilisateur
-<<<<<<< Updated upstream
-	IP        string    // Adresse IP de l'utilisateur
-=======
 	IPAddress string    // Adresse IP de l'utilisateur
->>>>>>> Stashed changes
 }
