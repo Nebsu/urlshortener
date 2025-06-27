@@ -17,20 +17,29 @@ var MigrateCmd = &cobra.Command{
 	Short: "Exécute les migrations de la base de données pour créer ou mettre à jour les tables.",
 	Long: `Cette commande se connecte à la base de données configurée (SQLite)
 et exécute les migrations automatiques de GORM pour créer les tables 'links' et 'clicks'
-basées sur les modèles Go.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// TODO : Charger la configuration chargée globalement via cmd.cfg
+basées sur les modèles Go.`, Run: func(cmd *cobra.Command, args []string) {
+		// Charger la configuration chargée globalement via cmd.cfg
+		cfg := cmd2.Cfg
 
-		// TODO 2: Initialiser la connexion à la base de données SQLite avec GORM.
+		// Initialiser la connexion à la base de données SQLite avec GORM.
+		db, err := gorm.Open(sqlite.Open(cfg.Database.Name), &gorm.Config{})
+		if err != nil {
+			log.Fatalf("FATAL: Échec de la connexion à la base de données SQLite: %v", err)
+		}
 
 		sqlDB, err := db.DB()
 		if err != nil {
 			log.Fatalf("FATAL: Échec de l'obtention de la base de données SQL sous-jacente: %v", err)
 		}
-		// TODO Assurez-vous que la connexion est fermée après la migration.
+		// Assurez-vous que la connexion est fermée après la migration.
+		defer sqlDB.Close()
 
-		// TODO 3: Exécuter les migrations automatiques de GORM.
+		// Exécuter les migrations automatiques de GORM.
 		// Utilisez db.AutoMigrate() et passez-lui les pointeurs vers tous vos modèles.
+		err = db.AutoMigrate(&models.Link{}, &models.Click{})
+		if err != nil {
+			log.Fatalf("FATAL: Échec de la migration automatique: %v", err)
+		}
 
 		// Pas touche au log
 		fmt.Println("Migrations de la base de données exécutées avec succès.")
@@ -38,5 +47,6 @@ basées sur les modèles Go.`,
 }
 
 func init() {
-	// TODO : Ajouter la commande à RootCmd
+	// Ajouter la commande à RootCmd
+	cmd2.RootCmd.AddCommand(MigrateCmd)
 }
