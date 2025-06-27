@@ -92,6 +92,4 @@ func init() {
 
 	// TODO : Ajouter la commande à RootCmd
 	cmd2.RootCmd.AddCommand(CreateCmd)
-	log.Println("Commande 'create' ajoutée avec succès.")
-
 }
